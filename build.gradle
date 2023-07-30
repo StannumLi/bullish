@@ -1,0 +1,73 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id 'io.micronaut.application' version "4.0.1"
+    id 'io.micronaut.aot' version "4.0.1"
+}
+
+version = "0.1"
+group = "com.bullish.interview.tinli"
+
+// Replace the overriding repositories url with proper url
+repositories {
+    maven { url "https://artifactory.com/artifactory/maven-release"
+    }
+}
+
+dependencies {
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    annotationProcessor("io.micronaut.data:micronaut-data-hibernate-jpa")
+    annotationProcessor("io.micronaut.data:micronaut-data-processor")
+    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
+
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    implementation("io.micronaut.validation:micronaut-validation")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    compileOnly("org.graalvm.nativeimage:svm")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("org.yaml:snakeyaml")
+    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+    implementation("io.micronaut.sql:micronaut-hibernate-jpa")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    runtimeOnly("com.h2database:h2")
+    implementation("jakarta.persistence:jakarta.persistence-api:2.2.3")
+    implementation("io.swagger.core.v3:swagger-annotations")
+
+    testImplementation("io.micronaut:micronaut-http-client")
+    testImplementation("io.micronaut:micronaut-inject-java")
+    testImplementation ("org.mockito:mockito-core:4.2.0")
+}
+
+
+application {
+    mainClass.set("com.bullish.interview.tinli.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+graalvmNative.toolchainDetection = false
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("com.bullish.interview.tinli.*")
+    }
+    aot {
+    // Please review carefully the optimizations enabled below
+    // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true
+        optimizeNetty = true
+    }
+}
+
+
+
