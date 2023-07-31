@@ -5,7 +5,7 @@ Given firm device security policy, a few steps are required before testing/runni
 1. Replace the private repository url with proper public repository url in `build.gradle` and `settings.gradle`
 2. Generate gradle wrapper files (a gradle runtime needs to be installed on your machine):
     
-    gradle wrapper
+        gradle wrapper
 
 ### How to test
     ./gradlew test
